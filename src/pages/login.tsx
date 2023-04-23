@@ -1,55 +1,30 @@
 import { type NextPage } from "next";
+import Button from "~/components/Button";
+import Form from "~/components/Form";
+import SplitLayout from "~/components/layouts/SplitLayout";
 
 const Login: NextPage = () => {
   return (
-    <div className="flex h-screen">
-      <div className="my-auto flex-1 bg-white">
-        <form className="flex flex-col gap-8 px-64" method="POST">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email" className="text-md font-medium">
-              Email
-            </label>
-            <input
-              className="rounded-md border-gray-300 bg-gray-50"
-              type="text"
-              name="email"
-              id="email"
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="password" className="text-md font-medium">
-              Password
-            </label>
-            <input
-              className="rounded-md border-gray-300 bg-gray-50"
-              type="text"
-              name="password"
-              id="password"
-            />
-          </div>
+    <SplitLayout className="flex h-screen">
+      <SplitLayout.Screen className="my-auto bg-white">
+        <Form method="POST">
+          <Form.Input id="email" name="email" type="text" label="Email" />
+          <Form.Input
+            id="password"
+            name="password"
+            type="password"
+            label="Password"
+          />
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <input
-                className="rounded border border-gray-300 bg-gray-50"
-                type="checkbox"
-                name="remember"
-                id="remember"
-              />
-              <label className="text-sm" htmlFor="remember">
-                Remember me
-              </label>
-            </div>
+            <Form.Checkbox id="remember" name="remember" label="Remember me" />
 
             <a href="#" className="text-sm font-medium text-indigo-500">
               Forget password?
             </a>
           </div>
 
-          <button className="rounded-md bg-indigo-500 p-2 font-medium text-white focus:outline-indigo-600">
-            Sign in
-          </button>
+          <Button type="submit">Sign in</Button>
 
           <div className="relative flex items-center">
             <div className="absolute left-1/2 right-1/2 w-[40%] -translate-x-1/2 bg-white">
@@ -109,10 +84,11 @@ const Login: NextPage = () => {
               Facebook
             </button>
           </div>
-        </form>
-      </div>
-      <div className="flex-1 bg-[url('/images/bg-login.jpg')] bg-cover bg-center bg-no-repeat"></div>
-    </div>
+        </Form>
+      </SplitLayout.Screen>
+
+      <SplitLayout.Screen className="bg-[url('/images/bg-login.jpg')] bg-cover bg-center bg-no-repeat" />
+    </SplitLayout>
   );
 };
 
