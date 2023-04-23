@@ -7,7 +7,7 @@ const Login: NextPage = () => {
   return (
     <SplitLayout>
       <SplitLayout.Screen className="my-auto bg-white">
-        <Form className="px-64" method="POST">
+        <Form className="px-64">
           <Form.Input id="email" name="email" type="text" label="Email" />
           <Form.Input
             id="password"
