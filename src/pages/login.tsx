@@ -5,9 +5,9 @@ import SplitLayout from "~/components/layouts/SplitLayout";
 
 const Login: NextPage = () => {
   return (
-    <SplitLayout className="flex h-screen">
+    <SplitLayout>
       <SplitLayout.Screen className="my-auto bg-white">
-        <Form method="POST">
+        <Form className="px-64" method="POST">
           <Form.Input id="email" name="email" type="text" label="Email" />
           <Form.Input
             id="password"
@@ -24,7 +24,12 @@ const Login: NextPage = () => {
             </a>
           </div>
 
-          <Button type="submit">Sign in</Button>
+          <Button
+            className="bg-indigo-500 text-white focus:outline-indigo-600"
+            type="submit"
+          >
+            Sign in
+          </Button>
 
           <div className="relative flex items-center">
             <div className="absolute left-1/2 right-1/2 w-[40%] -translate-x-1/2 bg-white">
@@ -36,7 +41,10 @@ const Login: NextPage = () => {
           </div>
 
           <div className="flex flex-row justify-between gap-5">
-            <button className="flex flex-1 items-center justify-center gap-3 rounded-md border bg-white p-2 font-medium text-gray-600">
+            <Button
+              type="button"
+              className="flex flex-1 items-center justify-center gap-3 border bg-white text-gray-600"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="21"
@@ -61,8 +69,11 @@ const Login: NextPage = () => {
                 />
               </svg>
               Google
-            </button>
-            <button className="flex flex-1 items-center justify-center gap-3 rounded-md bg-[#5890ff] p-2 font-medium text-white">
+            </Button>
+            <Button
+              type="button"
+              className="flex flex-1 items-center justify-center gap-3 bg-[#5890ff] text-white"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="21"
@@ -82,7 +93,7 @@ const Login: NextPage = () => {
                 />
               </svg>
               Facebook
-            </button>
+            </Button>
           </div>
         </Form>
       </SplitLayout.Screen>
