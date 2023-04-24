@@ -34,6 +34,7 @@ const Label = (props: PropsWithChildren<LabelType>) => {
 
 type InputType = InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
+  errormessage?: string;
 };
 
 const Input = forwardRef<HTMLInputElement, InputType>(function Input(
@@ -53,6 +54,7 @@ const Input = forwardRef<HTMLInputElement, InputType>(function Input(
           props?.className
         )}
       />
+      <p className="text-xs text-rose-600">{props?.errormessage}</p>
     </div>
   );
 });

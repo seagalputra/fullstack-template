@@ -1,29 +1,22 @@
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
 import { hash } from "bcrypt";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { Prisma } from "@prisma/client";
+import RegisterSchema from "~/schema/RegisterSchema";
 
 export const userRouter = createTRPCRouter({
-  ping: publicProcedure.query(() => {
-    return {
-      message: "pong",
-    };
-  }),
-
   register: publicProcedure
-    .input(
-      z.object({
-        firstName: z.string(),
-        lastName: z.string(),
-        email: z.string().email(),
-        password: z.string().min(8),
-        passwordConfirm: z.string().min(8),
-      })
-    )
+    .input(RegisterSchema)
     .mutation(async ({ input, ctx }) => {
-      const { firstName, lastName, email, password, passwordConfirm } = input;
+      const {
+        firstName,
+        lastName,
+        username,
+        email,
+        password,
+        passwordConfirm,
+      } = input;
 
       if (password !== passwordConfirm)
         throw new TRPCError({
@@ -39,6 +32,7 @@ export const userRouter = createTRPCRouter({
           data: {
             firstName,
             lastName,
+            username,
             email,
             password: passwordHash,
           },
@@ -48,6 +42,7 @@ export const userRouter = createTRPCRouter({
           id,
           firstName,
           lastName,
+          username,
           email,
         };
       } catch (err) {
