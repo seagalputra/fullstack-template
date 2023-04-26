@@ -1,32 +1,58 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import Link from "next/link";
 import { type NextPage } from "next";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { signIn } from "next-auth/react";
 import Button from "~/components/Button";
 import Form from "~/components/Form";
 import SplitLayout from "~/components/layouts/SplitLayout";
 
+type LoginInput = {
+  email: string;
+  password: string;
+};
+
 const Login: NextPage = () => {
+  const { register, handleSubmit } = useForm<LoginInput>();
+
+  const onLoginSubmit: SubmitHandler<LoginInput> = async ({
+    email,
+    password,
+  }) => {
+    await signIn("credentials", { email, password, callbackUrl: "/" });
+  };
+
   return (
     <SplitLayout>
       <SplitLayout.Screen className="my-auto bg-white">
         <Form className="px-64">
-          <Form.Input id="email" name="email" type="text" label="Email" />
+          <Form.Input
+            id="email"
+            type="text"
+            label="Email"
+            {...register("email")}
+          />
           <Form.Input
             id="password"
-            name="password"
             type="password"
             label="Password"
+            {...register("password")}
           />
 
           <div className="flex items-center justify-between">
             <Form.Checkbox id="remember" name="remember" label="Remember me" />
 
-            <a href="#" className="text-sm font-medium text-indigo-500">
+            <Link
+              href="/password/reset"
+              className="text-sm font-medium text-indigo-500"
+            >
               Forget password?
-            </a>
+            </Link>
           </div>
 
           <Button
             className="bg-indigo-500 text-white focus:outline-indigo-600"
-            type="submit"
+            onClick={handleSubmit(onLoginSubmit)}
           >
             Sign in
           </Button>

@@ -6,6 +6,7 @@ import {
 } from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
 
@@ -16,18 +17,18 @@ import { prisma } from "~/server/db";
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
+  // interface User extends DefaultUser {
+  //   id: string;
+  //   firstName: string | null;
+  //   lastName: string | null;
+  //   username: string | null;
+  // }
+
   interface Session extends DefaultSession {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
     } & DefaultSession["user"];
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 /**
@@ -36,14 +37,8 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-  callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+  pages: {
+    signIn: "/login",
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -52,11 +47,32 @@ export const authOptions: NextAuthOptions = {
         email: { label: "email", type: "text" },
         password: { label: "password", type: "password" },
       },
-      authorize(credentials, req) {
-        return null;
+      async authorize(credentials, _req) {
+        if (!credentials) return null;
+
+        const user = await prisma.user.findFirst({
+          where: {
+            email: credentials["email"],
+          },
+        });
+
+        if (!user) return null;
+
+        const hashedPassword = user.password ?? "";
+        const comparedResult = await bcrypt.compare(
+          credentials?.password,
+          hashedPassword
+        );
+
+        if (!comparedResult) return null;
+
+        return user;
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
 };
 
 /**
