@@ -104,7 +104,10 @@ const Register: NextPage = () => {
 
           <p className="text-center text-sm text-gray-500">
             Already have account?{" "}
-            <Link href="login" className="font-medium text-indigo-500">
+            <Link
+              href="login"
+              className="font-medium text-indigo-500 hover:underline"
+            >
               Sign in
             </Link>
           </p>
